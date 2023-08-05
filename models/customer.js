@@ -1,10 +1,10 @@
 const { default: mongoose } = require("mongoose");
 
-const Custumer = mongoose.model("custumers", {
+const Customer = mongoose.model("customers", {
     name: String,
     surname: String,
     dni: String,
     email: String
 });
 
-module.exports = Custumer;
+module.exports = Customer;

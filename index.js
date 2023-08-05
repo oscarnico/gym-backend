@@ -12,11 +12,11 @@ mongoose.connect(
 );
 
 const admins = require("./routes/adminRoute");
-const custumers = require("./routes/customerRoute")
+const customers = require("./routes/customerRoute")
 const services = require("./routes/serviceRoute")
 
 app.use("/admin", admins);
-app.use("/custumer", custumers);
+app.use("/customer", customers);
 app.use("/service", services)
 
 
