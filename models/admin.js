@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const Admin = mongoose.model("admins", {
-  mail: {
+  email: {
     type: String,
     require: true,
   },

@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 const { default: mongoose } = require("mongoose");
 const app = express();
 const port = 4000;
@@ -7,9 +8,7 @@ const morgan = require("morgan");
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
-mongoose.connect(
-  "mongodb+srv://oscar:mongo747474@cluster0.xop9pmw.mongodb.net/GymOscar"
-);
+mongoose.connect(process.env.MBD);
 
 const admins = require("./routes/adminRoute");
 const customers = require("./routes/customerRoute")
