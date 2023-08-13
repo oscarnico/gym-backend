@@ -17,13 +17,10 @@ const bcrypt = require("bcrypt");
 // module.exports = { checkAdmin };
 
 const loginAdmin = async (req, res) => {
-    console.log('entra')
     const { email, password } = req.body;
-
     try {
         const adminUser = await Admmins.findOne({ email });
         if (!adminUser) {
-            console.log(res);
             return res.status(401).json({ error: "El email no es correcto"});
         }
         // const hash2 = await bcrypt.hash(adminUser.password, 10);
@@ -31,9 +28,13 @@ const loginAdmin = async (req, res) => {
         if (!passworVeryf) {
             return res.status(401).json({ error: "Contraseña errónea"})
         }
-        
         const token = jwt.sign({ admin: adminUser.email, id: adminUser._id }, secret, { expiresIn: 300000});
-        return res.json({ Message: "Inicio de sesión correcto", token })
+        const data = {
+            Message: "Inicio de sesión correcto",
+            token: token,
+            email: adminUser.email
+        }
+        return res.json(data)
     } catch (error) {
         res.status(500).json({ error: "Inicio de sesión incorrecta" });
     };
