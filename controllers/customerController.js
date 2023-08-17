@@ -25,6 +25,28 @@ const getCustomersById = async (req, res) => {
     res.json(customer);
 };
 
+const editCustomerById = async (req, res) => {
+    const { customerId } = req.params;
+    const { name, surname, dni, email } = req.body;
+
+    try {
+        const editedCustomer = await Customer.findOneAndUpdate(
+            {_id: customerId},
+            { $set: {name, surname, dni, email}},
+            {new: true, useFindAndModify: false}
+        );
+
+        if (editedCustomer) {
+            res.json(editedCustomer);
+        } else {
+            res.status(404).json({ message: "No se encontró el cliente con el ID proporcionado." });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error al actualizar el cliente.", error: error.message });
+    }
+};
+
+
 const deleCustomersById = async (req, res) => {
     const { customerId } = req.params;
     await Customer.deleteOne({_id: customerId});
@@ -33,5 +55,6 @@ const deleCustomersById = async (req, res) => {
 
 module.exports = {
     getCustomers, getCustomersById,
+    editCustomerById,
     deleCustomersById, postCustomer
 };
