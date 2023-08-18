@@ -1,7 +1,7 @@
 const Customer = require("../models/customer");
 
 
-const postCustomer = async (req, res) => {
+const addtCustomer = async (req, res) => {
     const { name, surname, dni, email } = req.body;
     const newCustomer = new Customer({
         name,
@@ -56,5 +56,5 @@ const deleCustomersById = async (req, res) => {
 module.exports = {
     getCustomers, getCustomersById,
     editCustomerById,
-    deleCustomersById, postCustomer
+    deleCustomersById, addtCustomer
 };
