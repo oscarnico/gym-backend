@@ -11,12 +11,14 @@ app.use(cors());
 mongoose.connect(process.env.MBD);
 
 const admins = require("./routes/adminRoute");
-const customers = require("./routes/customerRoute")
-const services = require("./routes/serviceRoute")
+const customers = require("./routes/customerRoute");
+const services = require("./routes/serviceRoute");
+const payments = require("./routes/paymentRouter");
 
 app.use("/admin", admins);
 app.use("/customer", customers);
-app.use("/service", services)
+app.use("/service", services);
+app.use("/payment", payments);
 
 
 
