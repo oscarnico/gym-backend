@@ -14,4 +14,9 @@ const assingService = async (req, res) => {
     }
 };
 
-module.exports = { assingService };
+const getPayments = async (req, res) => {
+    const payment = await Payments.find();
+    res.json(payment);
+};
+
+module.exports = { assingService, getPayments };
