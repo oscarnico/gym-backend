@@ -35,6 +35,19 @@ const assingService = async (req, res) => {
   }
 };
 
+// const getPayments = async (req, res) => {
+//   try {
+//     const payments = await Payments.find()
+//       .populate("customerId")
+//       .populate("serviceId")
+//       .exec();
+
+//     res.json(payments);
+//   } catch (error) {
+//     res.status(500).send("Error en el servidor");
+//   }
+// };
+
 const getPayments = async (req, res) => {
   try {
     const payments = await Payments.find()
@@ -42,8 +55,26 @@ const getPayments = async (req, res) => {
       .populate("serviceId")
       .exec();
 
-    res.json(payments);
+    const processedData = {};
+
+    payments.forEach((item) => {
+      const clientId = item.customerId._id;
+
+      if (!processedData[clientId]) {
+        processedData[clientId] = {
+          ...item.customerId.toObject(),
+          services: [],
+        };
+      }
+
+      processedData[clientId].services.push(item.serviceId);
+    });
+
+    const clientsWithServices = Object.values(processedData);
+
+    res.json(clientsWithServices);
   } catch (error) {
+    console.error("Error al obtener los pagos", error);
     res.status(500).send("Error en el servidor");
   }
 };
