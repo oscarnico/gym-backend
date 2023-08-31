@@ -3,7 +3,7 @@ const router = express.Router();
 
 const customerController = require("../controllers/customerController");
 
-router.post("/", customerController.addtCustomer);
+router.post("/", customerController.addCustomer);
 
 router.get("/", customerController.getCustomers);
 
@@ -13,4 +13,4 @@ router.patch("/:customerId", customerController.editCustomerById)
 
 router.delete("/:customerId", customerController.deleCustomersById);
 
-module.exports = router;
+module.exports = router; 

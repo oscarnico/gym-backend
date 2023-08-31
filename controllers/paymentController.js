@@ -1,10 +1,10 @@
 const Payments = require("../models/payment");
 const Customer = require("../models/customer");
 const Service = require("../models/service");
+const transporter = require("../mailTicket");
 
 const assingService = async (req, res) => {
   const { customerId, serviceId } = req.body;
-  //   console.log("esto es el reqbody", req.body);
 
   try {
     const newPayment = new Payments({
@@ -13,9 +13,22 @@ const assingService = async (req, res) => {
       dateAssigned: Date.now(),
     });
 
-    // console.log(newPayment);
-
     await newPayment.save();
+
+    const customer = await Customer.findById(customerId);
+    
+    const mailTicket = {
+      to: customer.email,
+      subject: "Oscar´s Gym : Purchase Confirmation. ",
+      text: " Class paid for, you can access with this super secret key: PwAwSwA !! ",
+    };
+
+
+    try {
+      await transporter.sendMail(mailTicket);
+    } catch (error) {
+      console.log(error);
+    }
 
     // const customer = await Customer.findById(customerId);
     // const serviceObj = await Service.findById(serviceId);
