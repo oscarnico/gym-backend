@@ -16,13 +16,12 @@ const assingService = async (req, res) => {
     await newPayment.save();
 
     const customer = await Customer.findById(customerId);
-    
+
     const mailTicket = {
       to: customer.email,
       subject: "Oscar´s Gym : Purchase Confirmation. ",
       text: " Class paid for, you can access with this super secret key: PwAwSwA !! ",
     };
-
 
     try {
       await transporter.sendMail(mailTicket);
@@ -115,7 +114,7 @@ const deletePayment = async (req, res) => {
   const paymentId = req.params.id;
 
   try {
-    const deletedPayment = await Payments.findByIdAndDelete(paymentId);
+    const deletedPayment = await Payments.findByIdAndRemove(paymentId);
 
     if (!deletedPayment) {
       return res.status(404).send("Pago no encontrado");

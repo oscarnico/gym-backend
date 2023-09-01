@@ -7,12 +7,12 @@ router.post("/",paymentController.assingService);
 
 router.get("/", paymentController.getPayments);
 
-router.get("/paymentById", paymentController.getPaymentById);
+router.get("/:paymentById", paymentController.getPaymentById);
 
-router.delete("/", paymentController.deletePayment);
+router.delete("/:serviceId", paymentController.deletePayment);
 
-router.get("/serviceByCustomerId", paymentController.getServicesByCustomerId);
+router.get("/:serviceByCustomerId", paymentController.getServicesByCustomerId);
 
-router.get("/paymentByCustomerId", paymentController.getPaymentByCustomerId);
+router.get("/:paymentByCustomerId", paymentController.getPaymentByCustomerId);
 
 module.exports = router;
