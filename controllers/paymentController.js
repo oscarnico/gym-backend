@@ -28,37 +28,12 @@ const assingService = async (req, res) => {
     } catch (error) {
       console.log(error);
     }
-
-    // const customer = await Customer.findById(customerId);
-    // const serviceObj = await Service.findById(serviceId);
-    // if (customer) {
-    //   console.log(`objeto de service: ${serviceObj}`);
-    //   customer.services.push(serviceObj);
-    //   console.log(`valor de customer: ${customer}`);
-    //   await customer.save();
-    // } else {
-    //   throw new Error("cliente no encontrado");
-    // }
-
     res.status(200).send("Servicio asignado correctamente");
   } catch (error) {
     console.error("Error intentando asignar", error);
     res.status(500).send("error en el servidor");
   }
 };
-
-// const getPayments = async (req, res) => {
-//   try {
-//     const payments = await Payments.find()
-//       .populate("customerId")
-//       .populate("serviceId")
-//       .exec();
-
-//     res.json(payments);
-//   } catch (error) {
-//     res.status(500).send("Error en el servidor");
-//   }
-// };
 
 const getPayments = async (req, res) => {
   try {
@@ -79,7 +54,10 @@ const getPayments = async (req, res) => {
         };
       }
 
-      processedData[clientId].services.push(item.serviceId);
+      processedData[clientId].services.push({
+        ...item.serviceId._doc,
+        paymentId: item._id,
+      });
     });
 
     const clientsWithServices = Object.values(processedData);
@@ -110,19 +88,51 @@ const getPaymentById = async (req, res) => {
   }
 };
 
-const deletePayment = async (req, res) => {
-  const paymentId = req.params.id;
-
+const getTotalServices = async (req, res) => {
   try {
-    const deletedPayment = await Payments.findByIdAndRemove(paymentId);
+    const resultados = await Payments.aggregate([
+      {
+        $group: {
+          _id: "$serviceId",
+          total: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "_id",
+          foreignField: "_id",
+          as: "servicio",
+        },
+      },
+      {
+        $unwind: "$servicio",
+      },
+      {
+        $project: {
+          _id: 0,
+          description: "$servicio.description",
+          total: 1,
+        },
+      },
+    ]);
 
-    if (!deletedPayment) {
-      return res.status(404).send("Pago no encontrado");
-    }
-
-    res.json({ message: "Pago eliminado exitosamente" });
+    res.json(resultados);
   } catch (error) {
-    res.status(500).send("Error en el servidor");
+    res.status(500).send(error);
+  }
+};
+
+const deleteServiPay = async (req, res) => {
+  const { paymentId } = req.params;
+  console.log(paymentId);
+  try {
+    const paymentRecord = await Payments.findByIdAndDelete(paymentId);
+
+    res.status(200).send("Servicio eliminado correctamente.");
+  } catch (error) {
+    console.error("Error intentando eliminar el pago", error);
+    res.status(500).send("Error en el servidor.");
   }
 };
 
@@ -175,5 +185,6 @@ module.exports = {
   getPaymentByCustomerId,
   getServicesByCustomerId,
   getPaymentById,
-  deletePayment,
+  getTotalServices,
+  deleteServiPay,
 };
