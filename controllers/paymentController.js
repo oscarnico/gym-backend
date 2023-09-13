@@ -17,10 +17,68 @@ const assingService = async (req, res) => {
 
     const customer = await Customer.findById(customerId);
 
+    // const mailTicket = {
+    //   to: customer.email,
+    //   subject: "Oscar´s Gym : Purchase Confirmation. ",
+    //   text: " Class paid for, you can access with this super secret key: PwAwSwA !! ",
+    // };
+
     const mailTicket = {
       to: customer.email,
-      subject: "Oscar´s Gym : Purchase Confirmation. ",
-      text: " Class paid for, you can access with this super secret key: PwAwSwA !! ",
+      subject: "Oscar´s Gym : Purchase Confirmation.",
+      html: `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Mensaje de Oscar Gym</title>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  padding: 20px;
+                  background-color: #f5f5f5;
+              }
+  
+              .container {
+                  background-color:  #f0f0f0;;
+                  padding: 20px;
+                  border-radius: 5px;
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              }
+  
+              .header {
+                  font-weight: bold;
+                  font-size: 24px;
+                  margin-bottom: 20px;
+                  color: #007BFF;  /* azul */
+              }
+  
+              .emoji {
+                  font-size: 32px;
+              }
+              
+              .secret-code {
+                  background-color: #eef5ff; /* azul claro */
+                  padding: 10px;
+                  border-radius: 4px;
+                  font-weight: bold;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <div class="header">Oscar Gym! 🏋️</div>
+              <p>Procedemos a cargar en tu cuenta el importe de la clase contratada.</p>
+              <p>La palabra super secreta que te dará acceso a la clase es:</p>
+              <div class="secret-code">
+                  "wPwAwSwAw"
+              </div>
+          </div>
+      </body>
+      </html>
+      `,
     };
 
     try {
